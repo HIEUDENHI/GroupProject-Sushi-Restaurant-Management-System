@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doanh Thu Món Ăn</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Doanh Thu Món Ăn</h1>
+
+    <!-- Form lọc doanh thu -->
+    <form action="/admin/dish-revenue-stats" method="GET">
+        <div class="form-group">
+            <div>
+                <label for="startDate">Ngày bắt đầu:</label>
+                <input type="date" id="startDate" name="startDate" value="<%= startDate %>" required>
+            </div>
+            <div>
+                <label for="endDate">Ngày kết thúc:</label>
+                <input type="date" id="endDate" name="endDate" value="<%= endDate %>" required>
+            </div>
+        </div>
+        <button type="submit">Lấy Doanh Thu</button>
+    </form>
+
+    <!-- Hiển thị kết quả -->
+    <% if (dishStats.length > 0) { %>
+        <h2>Kết quả doanh thu</h2>
+        <table>
+            <tr>
+                <th>ID Món</th>
+                <th>Tên Món</th>
+                <th>Tổng Số Lượng Bán</th>
+                <th>Tổng Doanh Thu</th>
+            </tr>
+            <% dishStats.forEach(dish => { %>
+                <tr>
+                    <td><%= dish.DishID %></td>
+                    <td><%= dish.DishName %></td>
+                    <td><%= dish.TotalQuantitySold %></td>
+                    <td><%= dish.TotalRevenue.toLocaleString() %> VND</td>
+                </tr>
+            <% }); %>
+        </table>
+    <% } else { %>
+        <p>Không có dữ liệu doanh thu cho khoảng thời gian này.</p>
+    <% } %>
+
+    <div class="back-button">
+        <a href="/admin">
+            <button>Quay lại Trang Quản Lý</button>
+        </a>
+    </div>
+</body>
+</html>

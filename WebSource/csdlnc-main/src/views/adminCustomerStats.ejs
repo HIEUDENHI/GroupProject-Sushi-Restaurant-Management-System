@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống Kê Khách Hàng</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Thống Kê Khách Hàng</h1>
+
+    <!-- Form nhập thông tin -->
+    <form action="/admin/customer-stats" method="GET">
+        <div class="form-group">
+            <div>
+                <label for="startDate">Ngày bắt đầu:</label>
+                <input type="date" id="startDate" name="startDate" value="<%= startDate || '' %>" required>
+            </div>
+            <div>
+                <label for="endDate">Ngày kết thúc:</label>
+                <input type="date" id="endDate" name="endDate" value="<%= endDate || '' %>" required>
+            </div>
+            <div>
+                <label for="groupBy">Nhóm theo:</label>
+                <select name="groupBy" id="groupBy" required>
+                    <option value="DAY" <%= groupBy === 'DAY' ? 'selected' : '' %>>Ngày</option>
+                    <option value="MONTH" <%= groupBy === 'MONTH' ? 'selected' : '' %>>Tháng</option>
+                    <option value="YEAR" <%= groupBy === 'YEAR' ? 'selected' : '' %>>Năm</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit">Lấy Thống Kê</button>
+    </form>
+
+    <!-- Kết quả thống kê -->
+    <% if (stats && stats.length > 0) { %>
+        <h3>Kết quả thống kê khách hàng</h3>
+        <table>
+            <tr>
+                <th>Thời gian</th>
+                <th>Tổng hóa đơn</th>
+                <th>ID Khách Hàng</th>
+                <th>Tổng lượt ghé thăm</th>
+            </tr>
+            <% stats.forEach(stat => { %>
+                <tr>
+                    <td><%= stat.TimePeriod %></td>
+                    <td><%= stat.TotalInvoices %></td>
+                    <td><%= stat.TotalUniqueCustomers %></td>
+                    <td><%= stat.TotalCustomerVisits %></td>
+                </tr>
+            <% }); %>
+        </table>
+    <% } else if (stats === null) { %>
+        <p>Vui lòng nhập thông tin để lấy thống kê khách hàng.</p>
+    <% } else { %>
+        <p>Không có kết quả thống kê cho khoảng thời gian này.</p>
+    <% } %>
+
+    <div class="back-button">
+        <a href="/admin">
+            <button>Quay lại Trang Quản Lý</button>
+        </a>
+    </div>
+</body>
+</html>

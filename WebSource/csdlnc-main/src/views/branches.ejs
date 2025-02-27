@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Sách Chi Nhánh</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/branches.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/header.ejs') %>
+
+    <div class="container">
+        <h1 class="dashboard-title mb-1">Danh Sách Chi Nhánh</h1>
+        
+        <div class="branches-grid">
+            <% branches.forEach(branch => { %>
+                <div class="branch-card">
+                    <h2 class="branch-name">
+                        <i class="fas fa-store"></i>
+                        <%= branch.TenChiNhanh %>
+                    </h2>
+                    
+                    <div class="branch-info">
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><%= branch.DiaChi %></span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="far fa-clock"></i>
+                            <span><%= branch.GioMoCua %> - <%= branch.GioDongCua %></span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-map"></i>
+                            <span><%= branch.TenKhuVuc %></span>
+                        </div>
+                        
+                        <div class="parking-info">
+                            <div class="parking-item <%= branch.CoBaiDoXeMay ? 'available' : 'unavailable' %>">
+                                <i class="fas fa-motorcycle"></i>
+                                <span><%= branch.CoBaiDoXeMay ? 'Có bãi xe máy' : 'Không có bãi xe máy' %></span>
+                            </div>
+                            
+                            <div class="parking-item <%= branch.CoBaiDoOto ? 'available' : 'unavailable' %>">
+                                <i class="fas fa-car"></i>
+                                <span><%= branch.CoBaiDoOto ? 'Có bãi ô tô' : 'Không có bãi ô tô' %></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+
+    <%- include('partials/footer.ejs') %>
+</body>
+</html>

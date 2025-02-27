@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('partials/header.ejs') %>
+
+    <div class="container">
+        <h1 class="dashboard-title text-center mt-1 mb-1">Dashboard Quản Lý</h1>
+
+        <div class="grid">
+            <!-- Category 1: Doanh Thu -->
+            <div class="card">
+                <h2 class="category-title"><i class="fas fa-chart-line"></i> Thống Kê Doanh Thu</h2>
+                <ul class="nav-links">
+                    <li><a href="/admin/revenue-stats"><i class="fas fa-chart-bar"></i> Doanh Thu Hệ Thống</a></li>
+                    <li><a href="/admin/dish-revenue-stats"><i class="fas fa-utensils"></i> Doanh Thu Theo Món</a></li>
+                    <li><a href="/admin/branch-revenue-stats"><i class="fas fa-store"></i> Doanh Thu Theo Chi Nhánh</a></li>
+                </ul>
+            </div>
+
+            <!-- Category 2: Khách Hàng -->
+            <div class="card">
+                <h2 class="category-title"><i class="fas fa-users"></i> Quản Lý Khách Hàng</h2>
+                <ul class="nav-links">
+                    <li><a href="/admin/customer-stats"><i class="fas fa-user-chart"></i> Thống Kê Khách Hàng</a></li>
+                    <li><a href="/admin/top-customers"><i class="fas fa-crown"></i> Top 5 Khách Hàng</a></li>
+                    <li><a href="/admin/update-membership-tiers"><i class="fas fa-medal"></i> Cập Nhật Hạng Thành Viên</a></li>
+                </ul>
+            </div>
+
+            <!-- Category 3: Nhân Viên -->
+            <div class="card">
+                <h2 class="category-title"><i class="fas fa-user-tie"></i> Quản Lý Nhân Viên</h2>
+                <ul class="nav-links">
+                    <li><a href="/admin/employees"><i class="fas fa-users-cog"></i> Danh Sách Nhân Viên</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <% if (success) { %>
+            <p class="card text-center mt-1"><%= success %></p>
+        <% } %>
+    </div>
+</body>
+</html>

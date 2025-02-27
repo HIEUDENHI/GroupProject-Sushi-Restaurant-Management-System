@@ -1,0 +1,75 @@
+<header class="main-header">
+    <div class="logo">
+        <a href="/"><span class="highlight">Sushi Restaurant</span></a>
+    </div>
+    
+    <div class="search-bar">
+        <form action="/search" method="get">
+            <input type="text" id="search-input" name="q" placeholder="Tìm Tên món ăn" required autocomplete="off">
+            <button type="submit">🔍</button>
+        </form>
+        <div id="suggestions" class="suggestions"></div>
+    </div>
+    
+    <div class="user-actions">
+        <% if (typeof user !== 'undefined' && user) { %>
+            <span class="user-greeting">Xin chào, <%= user.name %>!</span>
+            <a href="/logout" class="btn-header">Đăng Xuất</a>
+            <a href="/user" class="btn-header">👤</a>
+            <a href="/cart" class="btn-header">🛒</a>
+        <% } else { %>
+            <a href="/login" class="btn-header">Đăng Nhập</a>
+            <a href="/register" class="btn-header">Đăng Ký</a>
+        <% } %>
+    </div>
+</header>
+
+<script>
+    const searchInput = document.getElementById('search-input');
+    const suggestionsBox = document.getElementById('suggestions');
+
+    // Lắng nghe sự kiện nhập vào input tìm kiếm
+    searchInput.addEventListener('input', async () => {
+        const query = searchInput.value.trim(); // Lấy nội dung người dùng nhập
+
+        if (query.length > 0) {
+            try {
+                // Gửi request AJAX đến server để lấy gợi ý
+                const response = await fetch(`/search?q=${encodeURIComponent(query)}`, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                const suggestions = await response.json(); // Parse kết quả JSON từ server
+
+                // Hiển thị danh sách gợi ý
+                suggestionsBox.style.display = 'block';
+                suggestionsBox.innerHTML = suggestions.map(dish => `
+                    <div 
+                        onclick="selectSuggestion('${dish.TenMon}')" 
+                        style="padding: 10px; cursor: pointer; border-bottom: 1px solid #444;">
+                        ${dish.TenMon} - ${dish.GiaTien.toFixed(2)} VND
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Lỗi khi tải gợi ý:', error);
+            }
+        } else {
+            // Ẩn danh sách gợi ý nếu không có nội dung
+            suggestionsBox.style.display = 'none';
+            suggestionsBox.innerHTML = '';
+        }
+    });
+
+    // Hàm chọn gợi ý và gán vào ô tìm kiếm
+    function selectSuggestion(name) {
+        searchInput.value = name; // Gán tên món ăn được chọn vào ô input
+        suggestionsBox.style.display = 'none'; // Ẩn danh sách gợi ý
+    }
+
+    // Ẩn danh sách gợi ý khi người dùng click ra ngoài
+    document.addEventListener('click', (event) => {
+        if (!suggestionsBox.contains(event.target) && event.target !== searchInput) {
+            suggestionsBox.style.display = 'none';
+        }
+    });
+</script>

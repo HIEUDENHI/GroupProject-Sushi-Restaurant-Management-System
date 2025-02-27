@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý nhân viên</title>
+    <!-- Liên kết tới file CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        // Toggle visibility of the transfer form
+        function toggleTransferForm(employeeId) {
+            const form = document.getElementById(`transfer-form-${employeeId}`);
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Quản lý nhân viên</h1>
+
+    <!-- Thông báo thành công -->
+    <% if (successMessage) { %>
+        <p style="color: green; text-align: center;"><%= successMessage %></p>
+    <% } %>
+
+    <!-- Thông báo lỗi -->
+    <% if (errorMessage) { %>
+        <p style="color: red; text-align: center;"><%= errorMessage %></p>
+    <% } %>
+
+    <!-- Biểu mẫu thêm nhân viên -->
+    <div class="form-container">
+        <h2>Thêm nhân viên mới</h2>
+        <form action="/admin/employees/add" method="POST">
+            <label for="HoTen">Họ tên:</label>
+            <input type="text" id="HoTen" name="HoTen" required>
+            <label for="NgaySinh">Ngày sinh:</label>
+            <input type="date" id="NgaySinh" name="NgaySinh" required>
+            <label for="GioiTinh">Giới tính:</label>
+            <select id="GioiTinh" name="GioiTinh" required>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+            </select>
+            <label for="MaBoPhan">Mã bộ phận:</label>
+            <input type="number" id="MaBoPhan" name="MaBoPhan" required>
+            <label for="MaChiNhanh">Mã chi nhánh:</label>
+            <input type="number" id="MaChiNhanh" name="MaChiNhanh" required>
+            <button type="submit" class="edit">Thêm nhân viên</button>
+        </form>
+    </div>
+
+    <!-- Danh sách nhân viên -->
+    <h2>Danh sách nhân viên</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Mã nhân viên</th>
+                <th>Họ tên</th>
+                <th>Ngày sinh</th>
+                <th>Giới tính</th>
+                <th>Mã bộ phận</th>
+                <th>Mã chi nhánh</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% employees.forEach(employee => { %>
+                <tr>
+                    <td><%= employee.MaNhanVien %></td>
+                    <td><%= employee.HoTen %></td>
+                    <td><%= employee.NgaySinh.toISOString().split('T')[0] %></td>
+                    <td><%= employee.GioiTinh %></td>
+                    <td><%= employee.MaBoPhan %></td>
+                    <td><%= employee.MaChiNhanh %></td>
+                    <td>
+                        <div class="action-buttons">
+                            <!-- Xóa nhân viên -->
+                            <form action="/admin/employees/delete" method="POST">
+                                <input type="hidden" name="MaNhanVien" value="<%= employee.MaNhanVien %>">
+                                <button type="submit" class="delete">Xóa</button>
+                            </form>
+
+                            <!-- Sửa nhân viên -->
+                            <a href="/admin/employees/edit/<%= employee.MaNhanVien %>">
+                                <button class="edit">Sửa</button>
+                            </a>
+
+                            <!-- Nút hiển thị form chuyển nhân viên -->
+                            <button 
+                                onclick="toggleTransferForm('<%= employee.MaNhanVien %>')" 
+                                class="transfer">
+                                Chuyển
+                            </button>
+                        </div>
+
+                        <!-- Biểu mẫu chuyển nhân viên (ẩn mặc định) -->
+                        <form 
+                            id="transfer-form-<%= employee.MaNhanVien %>" 
+                            action="/admin/employees" 
+                            method="POST" 
+                            style="display: none; margin-top: 10px;">
+                            <input type="hidden" name="employeeId" value="<%= employee.MaNhanVien %>">
+                            <label for="branch-<%= employee.MaNhanVien %>">Chuyển đến:</label>
+                            <select name="newBranchId" id="branch-<%= employee.MaNhanVien %>" required>
+                                <% branches.forEach(branch => { %>
+                                    <option value="<%= branch.MaChiNhanh %>"><%= branch.TenChiNhanh %></option>
+                                <% }); %>
+                            </select>
+                            <input type="date" name="transferDate" required>
+                            <button type="submit" style="background-color: #2ecc71;">Xác nhận</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <div class="back-button">
+        <a href="/admin">
+            <button class="edit">Quay lại Trang Quản Lý</button>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<h1>Cập nhật Menu - Bàn <%= tableId %>, Chi nhánh <%= branchId %></h1>
+
+<h2>Món đã đặt:</h2>
+<table border="1">
+    <tr>
+        <th>STT</th>
+        <th>Tên Món</th>
+        <th>Số Lượng</th>
+        <th>Giá Tiền</th>
+    </tr>
+    <% currentDishes.forEach(dish => { %>
+        <tr>
+            <td><%= dish.STT %></td>
+            <td><%= dish.TenMon %></td>
+            <td><%= dish.SoLuong %></td>
+            <td><%= dish.GiaTien %></td>
+        </tr>
+    <% }); %>
+</table>
+
+<h2>Thêm Món Mới:</h2>
+<form action="/staff/menu/<%= MaPhieu %>/add-dishes" method="POST">
+    <table border="1">
+        <tr>
+            <th>Tên Món</th>
+            <th>Giá Tiền</th>
+            <th>Số Lượng</th>
+        </tr>
+        <% menu.forEach(item => { %>
+            <tr>
+                <td><%= item.TenMon %></td>
+                <td><%= item.GiaTien %></td>
+                <td>
+                    <input type="number" name="quantity[<%= item.MaMon %>]" min="0" placeholder="Số lượng">
+                </td>
+            </tr>
+        <% }); %>
+    </table>
+    <button type="submit">Xác nhận thêm món</button>
+</form>
+
+<a href="/staff/tables/<%= branchId %>">Quay lại danh sách bàn</a>

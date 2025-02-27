@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doanh Thu Chi Nhánh</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Doanh Thu Chi Nhánh <%= branchId %></h1>
+
+    <!-- Form lọc doanh thu -->
+    <form action="/admin/branch-revenue-stats" method="GET">
+        <div class="form-group">
+            <div>
+                <label for="branchId">Chi nhánh:</label>
+                <input type="text" id="branchId" name="branchId" value="<%= branchId %>" required>
+            </div>
+            <div>
+                <label for="startDate">Ngày bắt đầu:</label>
+                <input type="date" id="startDate" name="startDate" value="<%= startDate %>" required>
+            </div>
+            <div>
+                <label for="endDate">Ngày kết thúc:</label>
+                <input type="date" id="endDate" name="endDate" value="<%= endDate %>" required>
+            </div>
+            <div>
+                <label for="groupBy">Nhóm theo:</label>
+                <select id="groupBy" name="groupBy" required>
+                    <option value="DAY" <%= groupBy === 'DAY' ? 'selected' : '' %>>Ngày</option>
+                    <option value="MONTH" <%= groupBy === 'MONTH' ? 'selected' : '' %>>Tháng</option>
+                    <option value="QUARTER" <%= groupBy === 'QUARTER' ? 'selected' : '' %>>Quý</option>
+                    <option value="YEAR" <%= groupBy === 'YEAR' ? 'selected' : '' %>>Năm</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit">Lấy Doanh Thu</button>
+    </form>
+
+    <!-- Hiển thị kết quả -->
+    <% if (revenueStats && revenueStats.length > 0) { %>
+        <h2>Kết quả doanh thu</h2>
+        <table>
+            <tr>
+                <th>Thời gian</th>
+                <th>Tổng doanh thu</th>
+                <th>Số hóa đơn</th>
+            </tr>
+            <% revenueStats.forEach(row => { %>
+                <tr>
+                    <td><%= row.TimePeriod %></td>
+                    <td><%= row.TotalRevenue.toLocaleString() %> VND</td>
+                    <td><%= row.TotalInvoices %></td>
+                </tr>
+            <% }); %>
+        </table>
+    <% } else { %>
+        <p>Không có dữ liệu doanh thu trong khoảng thời gian này.</p>
+    <% } %>
+
+    <div class="back-button">
+        <a href="/admin">
+            <button>Quay lại Trang Quản Lý</button>
+        </a>
+    </div>
+</body>
+</html>

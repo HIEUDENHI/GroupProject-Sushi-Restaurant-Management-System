@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 5 Khách Hàng</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Top 5 Khách Hàng</h1>
+
+    <!-- Form nhập thông tin -->
+    <form action="/admin/top-customers" method="GET">
+        <div class="form-group">
+            <div>
+                <label for="branchId">Mã Chi Nhánh:</label>
+                <input type="number" id="branchId" name="branchId" required>
+            </div>
+            <div>
+                <label for="year">Năm:</label>
+                <input type="number" id="year" name="year" required>
+            </div>
+            <div>
+                <label for="month">Tháng:</label>
+                <input type="number" id="month" name="month" required>
+            </div>
+        </div>
+        <button type="submit">Lấy Top 5</button>
+    </form>
+
+    <!-- Hiển thị kết quả -->
+    <% if (customers && customers.length > 0) { %>
+        <h3>Kết quả Top 5 Khách Hàng</h3>
+        <table>
+            <tr>
+                <th>Mã Khách Hàng</th>
+                <th>Tên Khách Hàng</th>
+                <th>Tổng Chi Tiêu</th>
+            </tr>
+            <% customers.forEach(customer => { %>
+                <tr>
+                    <td><%= customer.MaKhachHang %></td>
+                    <td><%= customer.TenKhachHang %></td>
+                    <td><%= customer.TotalSpending.toLocaleString('vi-VN') %> VND</td>
+                </tr>
+            <% }); %>
+        </table>
+    <% } else { %>
+        <p>Không có dữ liệu khách hàng cho chi nhánh này.</p>
+    <% } %>
+
+    <div class="back-button">
+        <a href="/admin">
+            <button>Quay lại Trang Quản Lý</button>
+        </a>
+    </div>
+</body>
+</html>

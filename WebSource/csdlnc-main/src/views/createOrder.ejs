@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Phiếu Đặt Món</title>
+</head>
+<body>
+    <h1>Tạo Phiếu Đặt Món</h1>
+    <form action="/staff/orders" method="post">
+        <label for="MaChiNhanh">Mã Chi Nhánh:</label>
+        <input type="number" id="MaChiNhanh" name="MaChiNhanh" required><br>
+
+        <label for="STTBan">Số Thứ Tự Bàn:</label>
+        <input type="number" id="STTBan" name="STTBan" required><br>
+
+        <label for="MaNV">Mã Nhân Viên:</label>
+        <input type="number" id="MaNV" name="MaNV" value="<%= user.id %>" readonly><br>
+
+        <label for="MaKH">Mã Khách Hàng (nếu có):</label>
+        <input type="number" id="MaKH" name="MaKH"><br>
+
+        <button type="submit">Tạo Phiếu</button>
+    </form>
+</body>
+</html>

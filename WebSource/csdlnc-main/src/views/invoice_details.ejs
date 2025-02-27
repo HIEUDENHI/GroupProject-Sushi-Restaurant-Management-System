@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông Tin Hóa Đơn</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--color-gray-100);
+            color: var(--color-gray-800);
+            padding: var(--space-md);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: var(--space-lg);
+            color: var(--color-primary);
+        }
+        p {
+            margin-bottom: var(--space-sm);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: var(--space-lg);
+            box-shadow: var(--shadow);
+        }
+        table, th, td {
+            border: 1px solid var(--color-border);
+        }
+        th, td {
+            padding: var(--space-sm);
+            text-align: center;
+        }
+        th {
+            background-color: var(--color-secondary);
+            color: var(--color-primary);
+        }
+        td {
+            background-color: var(--color-white);
+        }
+        .back-button {
+            display: flex;
+            justify-content: center;
+            margin-top: var(--space-md);
+        }
+        .back-button a {
+            text-decoration: none;
+        }
+        .back-button button {
+            padding: var(--space-xs) var(--space-sm);
+            background-color: var(--color-primary);
+            border: none;
+            border-radius: var(--border-radius);
+            color: var(--color-white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .back-button button:hover {
+            background-color: var(--color-accent);
+        }
+    </style>
+</head>
+<body>
+    <h1>Thông Tin Hóa Đơn</h1>
+
+    <p><strong>Mã Hóa Đơn:</strong> <%= invoice.MaHoaDon %></p>
+    <p><strong>Ngày Lập:</strong> <%= invoice.NgayLap %></p>
+    <p><strong>Tổng Tiền:</strong> <%= invoice.TongTien.toLocaleString('vi-VN') %> VND</p>
+    <p><strong>Tiền Giảm Giá:</strong> <%= invoice.TienGiamGia.toLocaleString('vi-VN') %> VND</p>
+    <p><strong>Nhân Viên:</strong> <%= invoice.NhanVien %></p>
+    <p><strong>Khách Hàng:</strong> <%= invoice.KhachHang || 'N/A' %></p>
+
+    <h2>Chi Tiết Món Ăn</h2>
+    <table>
+        <tr>
+            <th>Tên Món</th>
+            <th>Số Lượng</th>
+            <th>Giá Tiền</th>
+            <th>Thành Tiền</th>
+        </tr>
+        <% dishes.forEach(dish => { %>
+            <tr>
+                <td><%= dish.TenMon %></td>
+                <td><%= dish.SoLuong %></td>
+                <td><%= dish.GiaTien.toLocaleString('vi-VN') %> VND</td>
+                <td><%= dish.ThanhTien.toLocaleString('vi-VN') %> VND</td>
+            </tr>
+        <% }); %>
+    </table>
+
+    <div class="back-button">
+        <a href="/staff/tables/serving/<%= invoice.MaChiNhanh %>">
+            <button>Quay lại danh sách bàn đang phục vụ</button>
+        </a>
+    </div>
+</body>
+</html>

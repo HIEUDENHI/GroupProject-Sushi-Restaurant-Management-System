@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cập Nhật Trạng Thái Bàn</title>
+</head>
+<body>
+    <h1>Cập Nhật Trạng Thái Bàn</h1>
+    <form action="/staff/tables/<%= tableId %>/status" method="post">
+        <label for="MaChiNhanh">Mã Chi Nhánh:</label>
+        <input type="number" id="MaChiNhanh" name="MaChiNhanh" required><br>
+
+        <label for="TrangThai">Trạng Thái:</label>
+        <select id="TrangThai" name="TrangThai" required>
+            <option value="Trống">Trống</option>
+            <option value="Đã Đặt">Đã Đặt</option>
+            <option value="Đang Phục Vụ">Đang Phục Vụ</option>
+        </select><br>
+
+        <button type="submit">Cập Nhật</button>
+    </form>
+</body>
+</html>

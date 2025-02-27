@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doanh Thu Hệ Thống</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Doanh Thu Hệ Thống</h1>
+    
+    <!-- Form nhập thông tin -->
+    <form action="/admin/revenue-stats" method="GET">
+        <div class="form-group">
+            <div>
+                <label for="startDate">Ngày bắt đầu:</label>
+                <input type="date" id="startDate" name="startDate" required>
+            </div>
+            <div>
+                <label for="endDate">Ngày kết thúc:</label>
+                <input type="date" id="endDate" name="endDate" required>
+            </div>
+            <div>
+                <label for="groupBy">Nhóm theo:</label>
+                <select name="groupBy" id="groupBy" required>
+                    <option value="DAY">Ngày</option>
+                    <option value="MONTH">Tháng</option>
+                    <option value="QUARTER">Quý</option>
+                    <option value="YEAR">Năm</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit">Lấy Doanh Thu</button>
+    </form>
+
+    <!-- Kết quả doanh thu -->
+    <% if (revenueStats && revenueStats.length > 0) { %>
+        <h3>Kết quả doanh thu</h3>
+        <table>
+            <tr>
+                <th>Thời gian</th>
+                <th>Tổng doanh thu</th>
+                <th>Số hóa đơn</th>
+            </tr>
+            <% revenueStats.forEach(stat => { %>
+                <tr>
+                    <td><%= stat.TimePeriod %></td>
+                    <td><%= stat.TotalRevenue.toLocaleString('vi-VN') %> VND</td>
+                    <td><%= stat.TotalInvoices %></td>
+                </tr>
+            <% }); %>
+        </table>
+    <% } else { %>
+        <p>Không có kết quả doanh thu cho khoảng thời gian này.</p>
+    <% } %>
+
+    <div class="back-button">
+        <a href="/admin">
+            <button>Quay lại Trang Quản Lý</button>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách Bàn - Chi nhánh <%= branchId %></title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--color-gray-100);
+            color: var(--color-gray-800);
+            padding: var(--space-md);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: var(--space-lg);
+            color: var(--color-primary);
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: var(--space-md);
+        }
+        .button-container a {
+            text-decoration: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: var(--space-lg);
+            box-shadow: var(--shadow);
+        }
+        table, th, td {
+            border: 1px solid var(--color-border);
+        }
+        th, td {
+            padding: var(--space-sm);
+            text-align: center;
+        }
+        th {
+            background-color: var(--color-secondary);
+            color: var(--color-primary);
+        }
+        td {
+            background-color: var(--color-white);
+        }
+        button {
+            padding: var(--space-xs) var(--space-sm);
+            background-color: var(--color-primary);
+            border: none;
+            border-radius: var(--border-radius);
+            color: var(--color-white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        button:hover {
+            background-color: var(--color-accent);
+        }
+        select {
+            padding: var(--space-xs);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+        }
+        input[type="text"] {
+            padding: var(--space-xs);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            width: 150px;
+        }
+        .back-button {
+            display: flex;
+            justify-content: center;
+            margin-top: var(--space-md);
+        }
+    </style>
+</head>
+<body>
+    <h1>Danh sách Bàn - Chi nhánh <%= branchId %></h1>
+
+    <!-- Nút chuyển hướng đến các bàn đang phục vụ -->
+    <div class="button-container">
+        <a href="/staff/tables/serving/<%= branchId %>">
+            <button>Xem các bàn đang phục vụ</button>
+        </a>
+    </div>
+
+    <!-- Bảng danh sách bàn -->
+    <table>
+        <tr>
+            <th>Số Bàn</th>
+            <th>Trạng Thái</th>
+            <th>Hành Động</th>
+        </tr>
+        <% tables.forEach(table => { %>
+            <tr>
+                <td><%= table.STTBan %></td>
+                <td><%= table.TrangThai %></td>
+                <td>
+                    <!-- Form chuyển trạng thái bàn -->
+                    <form action="/staff/tables/<%= branchId %>/<%= table.STTBan %>/status" method="POST" style="display:inline;">
+                        <!-- Dropdown chọn trạng thái -->
+                        <select name="TrangThai" onchange="toggleCustomerInput(this, '<%= table.STTBan %>')">
+                            <option value="Trống" <%= table.TrangThai === 'Trống' ? 'selected' : '' %>>Trống</option>
+                            <option value="Đã đặt" <%= table.TrangThai === 'Đã đặt' ? 'selected' : '' %>>Đã đặt</option>
+                            <option value="Đang phục vụ" <%= table.TrangThai === 'Đang phục vụ' ? 'selected' : '' %>>Đang phục vụ</option>
+                        </select>
+
+                        <!-- Ô nhập MãKH -->
+                        <input type="text" name="MaKH" id="customer-input-<%= table.STTBan %>" 
+                               placeholder="Nhập MãKH" style="display: none; margin-left: 10px;">
+
+                        <button type="submit" style="margin-left: 10px;">Cập nhật</button>
+                    </form>
+
+                    <!-- Nút Chọn thực đơn nếu trạng thái là Đang phục vụ -->
+                    <% if (table.TrangThai === 'Đang phục vụ') { %>
+                        <a href="/staff/menu/<%= branchId %>/<%= table.STTBan %>" style="margin-left:10px;">
+                            <button>Chọn thực đơn</button>
+                        </a>
+                    <% } %>
+                </td>
+            </tr>
+        <% }); %>
+    </table>
+
+    <!-- Nút quay lại -->
+    <div class="back-button">
+        <a href="/customer/add-reservation">
+            <button>Đặt Bàn Cho Khách</button>
+        </a>
+    </div>
+
+    <script>
+        // Hiển thị ô nhập MãKH khi chọn trạng thái "Đang phục vụ"
+        function toggleCustomerInput(select, tableId) {
+            const inputField = document.getElementById(`customer-input-${tableId}`);
+            if (select.value === 'Đang phục vụ') {
+                inputField.style.display = 'inline-block';
+            } else {
+                inputField.style.display = 'none';
+                inputField.value = ''; // Reset ô nhập
+            }
+        }
+    </script>
+</body>
+</html>

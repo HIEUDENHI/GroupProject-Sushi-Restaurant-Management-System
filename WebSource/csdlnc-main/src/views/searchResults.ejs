@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết quả tìm kiếm</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dishes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <main class="container">
+        <div class="search-results-header">
+            <h1 class="dashboard-title">Kết quả tìm kiếm cho "<%= query %>"</h1>
+            <a href="/" class="btn"><i class="fas fa-arrow-left"></i> Quay lại</a>
+        </div>
+
+        <% if (dishes.length === 0) { %>
+            <div class="empty-state">
+                <i class="fas fa-search fa-3x"></i>
+                <p>Không tìm thấy món ăn phù hợp.</p>
+                <a href="/" class="btn">Về trang chủ</a>
+            </div>
+        <% } else { %>
+            <div class="dishes-grid">
+                <% dishes.forEach(dish => { %>
+                    <div class="dish-card">
+                        <strong class="dish-name"><%= dish.TenMon %></strong>
+                        <span class="dish-price"><%= dish.GiaTien.toLocaleString('vi-VN') %> VND</span>
+                        <% if (dish.LoaiMon) { %>
+                            <span class="dish-category">
+                                <i class="fas fa-utensils"></i>
+                                <%= dish.LoaiMon %>
+                            </span>
+                        <% } %>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

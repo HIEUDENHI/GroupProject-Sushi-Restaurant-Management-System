@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Bàn</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        async function fetchBranches() {
+            try {
+                const response = await fetch('/customer/branches');
+                const branches = await response.json();
+                const branchSelect = document.getElementById('branchId');
+
+                branches.forEach(branch => {
+                    const option = document.createElement('option');
+                    option.value = branch.MaChiNhanh;
+                    option.textContent = branch.TenChiNhanh;
+                    branchSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Lỗi khi tải danh sách chi nhánh:', error);
+            }
+        }
+
+        async function fetchTables(branchId) {
+            try {
+                const response = await fetch(`/customer/available-tables?branchId=${branchId}`);
+                const tables = await response.json();
+                const tableSelect = document.getElementById('tableNumber');
+                tableSelect.innerHTML = '<option value="">Chọn bàn</option>'; // Xóa các lựa chọn cũ
+
+                tables.forEach(table => {
+                    const option = document.createElement('option');
+                    option.value = table.STTBan;
+                    option.textContent = `Bàn ${table.STTBan}`;
+                    tableSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Lỗi khi tải danh sách bàn trống:', error);
+            }
+        }
+
+        // Tải danh sách chi nhánh khi trang được tải
+        document.addEventListener('DOMContentLoaded', fetchBranches);
+    </script>
+</head>
+<body>
+    <h1>Đặt Bàn</h1>
+
+    <!-- Thông báo lỗi hoặc thành công -->
+    <% if (errorMessage) { %>
+        <p style="color: red; text-align: center;"><%= errorMessage %></p>
+    <% } %>
+    <% if (successMessage) { %>
+        <p style="color: green; text-align: center;"><%= successMessage %></p>
+    <% } %>
+
+    <!-- Form đặt bàn -->
+    <form action="/customer/add-reservation" method="POST">
+        <div class="form-group">
+            <div>
+                <label for="branchId">Chi Nhánh:</label>
+                <select id="branchId" name="branchId" required onchange="fetchTables(this.value)">
+                    <option value="">Chọn chi nhánh</option>
+                </select>
+            </div>
+            <div>
+                <label for="tableNumber">Bàn:</label>
+                <select id="tableNumber" name="tableNumber" required>
+                    <option value="">Chọn bàn</option>
+                </select>
+            </div>
+            <div>
+                <label for="reservationDate">Ngày Đặt:</label>
+                <input type="date" id="reservationDate" name="reservationDate" required>
+            </div>
+            <div>
+                <label for="arrivalTime">Giờ Đến:</label>
+                <input type="datetime-local" id="arrivalTime" name="arrivalTime" required>
+            </div>
+            <div>
+                <label for="guestCount">Số Lượng Khách:</label>
+                <input type="number" id="guestCount" name="guestCount" required>
+            </div>
+            <div>
+                <label for="notes">Ghi Chú (Tùy chọn):</label>
+                <textarea id="notes" name="notes" rows="4"></textarea>
+            </div>
+        </div>
+        <button type="submit">Đặt Bàn</button>
+    </form>
+</body>
+</html>

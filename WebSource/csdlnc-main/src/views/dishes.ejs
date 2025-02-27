@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dishes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Danh sách món ăn</title>
+</head>
+<body>
+    <%- include('partials/header.ejs') %>
+    
+    <div class="dishes-container">
+        <h1 class="dashboard-title mb-1">Danh sách món ăn</h1>
+
+        <section class="filters-section">
+            <form class="filters-form" action="/dishes" method="GET">
+                <div class="filter-group">
+                    <label for="branch">Chi Nhánh</label>
+                    <select name="branchId" id="branch">
+                        <option value="">Tất cả</option>
+                        <% branches.forEach(branch => { %>
+                            <option value="<%= branch.MaChiNhanh %>" 
+                                    <%= selectedBranch == branch.MaChiNhanh ? 'selected' : '' %>>
+                                <%= branch.TenChiNhanh %>
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="region">Khu Vực</label>
+                    <select name="regionId" id="region">
+                        <option value="">Tất cả</option>
+                        <% regions.forEach(region => { %>
+                        <option value="<%= region.MaKhuVuc %>" <%= selectedRegion == region.MaKhuVuc ? 'selected' : '' %>>
+                            <%= region.TenKhuVuc %>
+                        </option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="menu">Mục Thực Đơn</label>
+                    <select name="menuId" id="menu">
+                        <option value="">Tất cả</option>
+                        <% menus.forEach(menu => { %>
+                            <option value="<%= menu.MaMucThucDon %>" <%= selectedMenu == menu.MaMucThucDon ? 'selected' : '' %>>
+                                <%= menu.TenMucThucDon %>
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <button type="submit" class="filter-submit">Lọc</button>
+            </form>
+        </section>
+
+        <!-- Danh sách Món Ăn -->
+        <% dishes.forEach(dish => { %>
+            <div class="dish-card">
+                <strong><%= dish.TenMon %></strong>
+                <div class="dish-price">
+                    <%= dish.GiaTien.toLocaleString('vi-VN') %> VND
+                </div>
+                <div class="dish-category">
+                    <i class="fas fa-tag"></i> <%= dish.TenMucThucDon %>
+                </div>
+                <% if (dish.ChiNhanh.length > 0) { %>
+                    <div>
+                        <small>Các chi nhánh phục vụ:</small>
+                        <ul class="branch-list">
+                            <% dish.ChiNhanh.forEach(branch => { %>
+                                <li><%= branch %></li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                <% } else { %>
+                    <span class="no-branch">Không có chi nhánh phục vụ</span>
+                <% } %>
+            </div>
+        <% }); %>
+    </div>
+</body>
+</html>
